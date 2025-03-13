@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import "../css/admin.css";
+import "../styles/styles.css";
 
 const UploadTest = () => {
   const [file, setFile] = useState(null);
