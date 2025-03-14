@@ -1,0 +1,143 @@
+[
+    {
+      "id": "q1",
+      "questionText": "What is the output of `console.log(typeof null);` in JavaScript?",
+      "type": "MCQ",
+      "options": [
+        "",
+        "A) \"null\"",
+        "",
+        "B) \"undefined\"",
+        "",
+        "C) \"object\"",
+        "",
+        "D) \"string\"",
+        ""
+      ],
+      "answer": "C",
+      "student_answer": ""
+    },
+    {
+      "id": "q2",
+      "questionText": "Which language is primarily used for web development?",
+      "type": "MCQ",
+      "options": [
+        "",
+        "A) Python",
+        "",
+        "B) JavaScript",
+        "",
+        "C) C++",
+        "",
+        "D) Java",
+        ""
+      ],
+      "answer": "B",
+      "student_answer": ""
+    },
+    {
+      "id": "q3",
+      "questionText": "Explain the concept of Object-Oriented Programming (OOP).",
+      "type": "Subjective",
+      "options": [],
+      "answer": "(Open-ended, to be evaluated manually)",
+      "student_answer": ""
+    },
+    {
+      "id": "q4",
+      "questionText": "Which of the following is NOT a relational database?",
+      "type": "MCQ",
+      "options": [
+        "",
+        "A) MySQL",
+        "",
+        "B) PostgreSQL",
+        "",
+        "C) MongoDB",
+        "",
+        "D) SQLite",
+        ""
+      ],
+      "answer": "C",
+      "student_answer": ""
+    },
+    {
+      "id": "q5",
+      "questionText": "What is the capital of France?",
+      "type": "MCQ",
+      "options": [
+        "",
+        "A) Berlin",
+        "",
+        "B) Madrid",
+        "",
+        "C) Paris",
+        "",
+        "D) Rome",
+        ""
+      ],
+      "answer": "C",
+      "student_answer": ""
+    },
+    {
+      "id": "q6",
+      "questionText": "Who developed the theory of relativity?",
+      "type": "MCQ",
+      "options": [
+        "",
+        "A) Isaac Newton",
+        "",
+        "B) Albert Einstein",
+        "",
+        "C) Galileo Galilei",
+        "",
+        "D) Stephen Hawking",
+        ""
+      ],
+      "answer": "B",
+      "student_answer": ""
+    },
+    {
+      "id": "q7",
+      "questionText": "The process of converting human-readable code into machine code is called ______.",
+      "type": "Subjective",
+      "options": [],
+      "answer": "Compilation",
+      "student_answer": ""
+    },
+    {
+      "id": "q8",
+      "questionText": "Describe the working of a blockchain network.",
+      "type": "Subjective",
+      "options": [],
+      "answer": "(Open-ended, to be evaluated manually)",
+      "student_answer": ""
+    },
+    {
+      "id": "q9",
+      "questionText": "What does CSS stand for?",
+      "type": "MCQ",
+      "options": [
+        "",
+        "A) Creative Style Sheets",
+        "",
+        "B) Cascading Style Sheets",
+        "",
+        "C) Computer Style Sheets",
+        "",
+        "D) Colorful Style Sheets",
+        ""
+      ],
+      "answer": "B",
+      "student_answer": ""
+    },
+    {
+      "id": "q10",
+      "questionText": "The OSI model has 5 layers.",
+      "type": "Subjective",
+      "options": [],
+      "answer": "False (It has 7 layers)",
+      "student_answer": ""
+    }
+  ]
+  

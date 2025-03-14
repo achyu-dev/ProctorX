@@ -1,96 +1,29 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import MCQQuestion from "./MCQQuestion";
+import SubjectiveQuestion from "./SubjectiveQuestion";
+import TrueFalseQuestion from "./TrueFalseQuestion";
 
-// Component to render each question
-const Question = ({ questionData, index }) => {
-    const { questionText, type, options } = questionData;
-    const [answer, setAnswer] = useState("");
+const QuestionRenderer = ({ question, onAnswerUpdate }) => {
+  if (!question) return null;
 
-    return (
-        <div className="question-container">
-            <h3>{index + 1}. {questionText}</h3>
+  const renderQuestion = () => {
+    switch (question.type) {
+      case "MCQ":
+        return <MCQQuestion questionData={question} onAnswerUpdate={onAnswerUpdate} />;
+      case "Subjective":
+        return <SubjectiveQuestion questionData={question} onAnswerUpdate={onAnswerUpdate} />;
+      case "True/False":
+        return <TrueFalseQuestion questionData={question} onAnswerUpdate={onAnswerUpdate} />;
+      default:
+        return <div>Unknown question type</div>;
+    }
+  };
 
-            {type === "MCQ" && (
-                <div>
-                    {options.map((option, i) => (
-                        <label key={i}>
-                            <input 
-                                type="radio" 
-                                name={`q${index}`} 
-                                value={option} 
-                                onChange={(e) => setAnswer(e.target.value)}
-                            />
-                            {option}
-                        </label>
-                    ))}
-                </div>
-            )}
-
-            {type === "True/False" && (
-                <div>
-                    <label>
-                        <input 
-                            type="radio" 
-                            name={`q${index}`} 
-                            value="True" 
-                            onChange={() => setAnswer("True")}
-                        />
-                        True
-                    </label>
-                    <label>
-                        <input 
-                            type="radio" 
-                            name={`q${index}`} 
-                            value="False" 
-                            onChange={() => setAnswer("False")}
-                        />
-                        False
-                    </label>
-                </div>
-            )}
-
-            {type === "Subjective" && (
-                <textarea 
-                    placeholder="Type your answer here..." 
-                    onChange={(e) => setAnswer(e.target.value)}
-                />
-            )}
-        </div>
-    );
-};
-
-// Main Component to Fetch and Display Questions
-const QuestionRenderer = () => {
-    const [questions, setQuestions] = useState([]);
-
-    useEffect(() => {
-        axios.get("http://localhost:3000/api/questions")
-    .then(response => {
-        if (Array.isArray(response.data)) {
-            console.log("✅ Questions Fetched:", response.data.questions);
-            setQuestions(response.data);
-        } else {
-            console.warn("⚠️ Unexpected API response:", response.data);
-            setQuestions([]);
-        }
-    })
-    .catch(error => {
-        console.error("❌ API Error:", error);
-        setQuestions([]); // Prevent crashes on error
-    });
-    }, []);
-    
-
-    return (
-        <div className="quiz-container">
-            <h2>Test Questions</h2>
-            {questions.length > 0 ? (
-                questions.map((q, index) => <Question key={index} questionData={q} index={index} />)
-            ) : (
-                <p>Loading questions...</p>
-            )}
-        </div>
-    );
+  return (
+    <div className="question-renderer">
+      {renderQuestion()}
+    </div>
+  );
 };
 
 export default QuestionRenderer;
