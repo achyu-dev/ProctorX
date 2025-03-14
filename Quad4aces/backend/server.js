@@ -168,5 +168,19 @@ app.get("/api/ready-test", (req, res) => {
       res.status(404).json({ error: "Ready test not found" });
     }
   });
+
+const studentAnswersPath = path.join(__dirname, "student_answered.json");
+
+app.post("/api/submit-test", (req, res) => {
+    const submittedData = req.body;
+
+    fs.writeFile(studentAnswersPath, JSON.stringify(submittedData, null, 2), (err) => {
+        if (err) {
+            console.error("Error saving test answers:", err);
+            return res.status(500).json({ message: "Error saving answers" });
+        }
+        res.status(200).json({ message: "Test submitted successfully" });
+    });
+});
   
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

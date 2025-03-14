@@ -1,5 +1,5 @@
 import React from "react";
-
+import "../styles/sidebar.css";
 const Sidebar = ({ questions, answersMap, currentIndex, setCurrentQuestionIndex }) => {
   return (
     <div className="sidebar">
