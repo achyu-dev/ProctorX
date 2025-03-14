@@ -11,12 +11,11 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route path="/admin" element={<AdminHome/>} />
       <Route path="/Assesment" element={<Assesment />} />
-      <Route path="/" element={<AdminHome />} />
-        <Route path="/upload" element={<UploadTest />} />
-        <Route path="/previous-tests" element={<PreviousTests />} />
-        <Route path="/edit-test" element={<EditTest />} />
+      <Route path="/upload" element={<UploadTest />} />
+      <Route path="/previous-tests" element={<PreviousTests />} />x
+      <Route path="/edit-test" element={<EditTest />} />
     </Routes>
   );
 }
