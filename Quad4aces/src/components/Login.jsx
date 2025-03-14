@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '/Users/adityashenoy/Documents/GitHub/Quad_Aces_Proctor/Quad4aces/src/css/login.css';
+import  '../styles/Login.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
