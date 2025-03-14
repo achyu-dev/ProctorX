@@ -1,7 +1,4 @@
 [
-  {
-    "filename": "testing.pdf",
-    "questions": [
       {
         "questionText": "What is the output of `console.log(typeof null);` in JavaScript?",
         "type": "MCQ",
@@ -122,6 +119,4 @@
         "options": [],
         "answer": "False (It has 7 layers)"
       }
-    ]
-  }
 ]

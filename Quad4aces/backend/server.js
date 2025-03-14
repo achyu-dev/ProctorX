@@ -149,4 +149,38 @@ app.get("/api/questions", (req, res) => {
         res.status(404).json({ error: "Processed questions not found" });
     }
 });
+
+// Endpoint to fetch ready test data
+app.get("/api/ready-test", (req, res) => {
+    // Assuming ready_test.json is saved at the project root (adjust the path as needed)
+    const filePath = path.join(__dirname, "ready_test.json");
+  
+    if (fs.existsSync(filePath)) {
+      try {
+        const data = fs.readFileSync(filePath, "utf8");
+        // If the file content is an array of questions, return it directly
+        res.json(JSON.parse(data));
+      } catch (error) {
+        console.error("❌ Error reading ready_test.json:", error);
+        res.status(500).json({ error: "Error processing ready test data" });
+      }
+    } else {
+      res.status(404).json({ error: "Ready test not found" });
+    }
+  });
+
+const studentAnswersPath = path.join(__dirname, "student_answered.json");
+
+app.post("/api/submit-test", (req, res) => {
+    const submittedData = req.body;
+
+    fs.writeFile(studentAnswersPath, JSON.stringify(submittedData, null, 2), (err) => {
+        if (err) {
+            console.error("Error saving test answers:", err);
+            return res.status(500).json({ message: "Error saving answers" });
+        }
+        res.status(200).json({ message: "Test submitted successfully" });
+    });
+});
+  
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
