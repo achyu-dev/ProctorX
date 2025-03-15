@@ -1,78 +1,62 @@
 import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
+import "../styles/chatsupport.css";
 
 const socket = io("http://localhost:3001");
 
 const Chatsupport = ({ isAdmin }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [input, setInput] = useState("");
 
   useEffect(() => {
-    socket.on("receiveMessage", (messageData) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (user && messageData.testid === user.testid) {
-        setMessages((prevMessages) => [...prevMessages, messageData]);
-      }
+    socket.on("message", (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
     });
-  
-    socket.on("chatHistory", (history) => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (user) {
-        const filteredHistory = history.filter(msg => msg.testid === user.testid);
-        setMessages(filteredHistory);
-      }
-    });
-  
+
     return () => {
-      socket.off("receiveMessage");
-      socket.off("chatHistory");
+      socket.off("message");
     };
   }, []);
-  
 
-  const sendMessage = () => {
-    if (newMessage.trim() === "") return;
-  
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) return;
-  
-    const messageData = {
-      testid: user.testid, // Ensure testid is included
-      sender: isAdmin ? "Admin" : user.emailid,
-      text: newMessage,
-      timestamp: new Date().toISOString(),
-    };
-  
-    socket.emit("sendMessage", messageData);
-    setNewMessage(""); // Clear input
+  const toggleChat = () => {
+    setIsOpen(!isOpen);
   };
-  
+
+  const handleSend = () => {
+    if (input.trim()) {
+      const userMessage = { sender: "user", text: input };
+      setMessages([...messages, userMessage]);
+      socket.emit("message", userMessage);
+      setInput("");
+    }
+  };
 
   return (
-    <div className="chat-container">
-      <div className="chat-box">
-        <h3>Chat Support</h3>
-        <div className="chat-messages">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={msg.sender === "Admin" ? "admin-msg" : "student-msg"}
-            >
-              <strong>{msg.sender}:</strong> {msg.text}
-              
-            </div>
-          ))}
+    <div className="chat-support">
+      <button className="chat-toggle" onClick={toggleChat}>
+        {isOpen ? "Close Chat" : "Chat Support"}
+      </button>
+      {isOpen && (
+        <div className="chat-window">
+          <div className="chat-messages">
+            {messages.map((msg, index) => (
+              <div key={index} className={`chat-message ${msg.sender}`}>
+                {msg.text}
+              </div>
+            ))}
+          </div>
+          <div className="chat-input">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type your message..."
+            />
+            <button onClick={handleSend}>Send</button>
+          </div>
         </div>
-        <div className="chat-input">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
-          <button onClick={sendMessage}>Send</button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
