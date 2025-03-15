@@ -6,7 +6,10 @@ const UploadTest = () => {
   const [file, setFile] = useState(null);
   const [fileURL, setFileURL] = useState(null);
   const [message, setMessage] = useState("");
-
+  const [testid2, setTestid] = useState("");
+  const handleTestid = (e) => {
+    setTestid(e.target.value);
+  }
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
 
@@ -39,9 +42,11 @@ const UploadTest = () => {
     formData.append("pdf", file);
 
     try {
-      const res = await axios.post("http://localhost:3000/upload", formData, {
+      const res = await axios.post("http://localhost:3000/upload?testid2="+testid2, formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        body: JSON.stringify({testid2: testid2}),
       });
+      
 
       setMessage("✅ Upload successful! You can now edit the test.");
       setFileURL(null); // Clear preview after upload
@@ -53,6 +58,7 @@ const UploadTest = () => {
   return (
     <div className="upload-container">
       <h2>Upload a Test</h2>
+      <input type="text" placeholder="Enter test ID" onChange={handleTestid}/>
       <input type="file" accept="application/pdf" onChange={handleFileChange} />
       
       {/* Show preview only if a file is selected */}

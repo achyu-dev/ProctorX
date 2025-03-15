@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../styles/landingpage.css'; // Importing the updated CSS file
 import { Link } from 'react-router-dom';
 
 function LandingPage() {
+  useEffect(() => {
+    localStorage.removeItem('user'); // Clear user data on landing page load
+  }, []);
     const handle = () => {
         // Redirect to the login page
         window.location.href = '/login';
