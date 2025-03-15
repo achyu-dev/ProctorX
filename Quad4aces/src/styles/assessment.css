@@ -1,13 +1,17 @@
 /* Container layout */
 .assessment-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: auto;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  background: linear-gradient(to bottom right, 
+  #3D52A0, 
+  #7091E6, 
+  #8697C4, 
+  #ADBDBA, 
+  #EDE8F5);
+  color: white;
+  font-family: Arial, sans-serif;
 }
 
 /* Header (Timer) */
@@ -24,6 +28,15 @@
   display: flex;
   padding: 20px;
   gap: 20px;
+  background: linear-gradient(to bottom right, 
+  #3D52A0, 
+  #7091E6, 
+  #8697C4, 
+  #ADBDBA, 
+  #EDE8F5);
+  flex-grow: 1;
+  height: calc(100vh - 60px); /* Adjust height to account for header and footer */
+  overflow-y: auto;
 }
 
 /* Footer (Navigation & Submit Buttons) */
@@ -31,7 +44,14 @@
   display: flex;
   justify-content: space-between;
   padding: 15px;
-  background: #f1f1f1;
+  background: linear-gradient(to bottom right, 
+  #3D52A0, 
+  #7091E6, 
+  );
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 10000;
 }
 
 .assessment-footer button {
@@ -54,4 +74,8 @@
 
 .assessment-footer button:hover:not(:disabled) {
   background: #0056b3;
+}
+
+.warning-modal {
+  background-color: orangered;
 }
