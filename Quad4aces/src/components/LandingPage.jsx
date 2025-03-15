@@ -32,9 +32,9 @@ function LandingPage() {
  
         </div>
 
-        <div className="image-container">
+        {/* <div className="image-container">
           <img src="/exam_image.png" alt="Exam Illustration" className="image" />
-        </div>
+        </div> */}
       </main>
 
       <footer className="footer">
