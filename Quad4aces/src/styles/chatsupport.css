@@ -1,7 +1,7 @@
 .chat-support {
   position: fixed;
-  bottom: 50px;
-  right: 20px;
+  bottom: 100px;
+  right: 50px;
   z-index: 1000;
 }
 
@@ -12,6 +12,7 @@
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  bottom: 500px; /* Adjusted to place it a little above */
 }
 
 .chat-window {
