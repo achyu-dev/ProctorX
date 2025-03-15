@@ -10,6 +10,9 @@ import LandingPage from "./components/LandingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterStudent from "./components/RegisterStudent";
 import AdminChat from "./components/AdminChat";
+import ContactPage from "./components/Contact";
+import About from "./components/About";
+import Features from "./components/Features";
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegisterAdmin />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/features" element={<Features />} />
 
       {/* Admin Protected Routes */}
       <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminHome /></ProtectedRoute>} />

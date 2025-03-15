@@ -90,6 +90,7 @@ const Login = () => {
           />
         </div>
 
+
         {/* Password Input */}
         <div className="password">
           <label style={{ marginRight: "10px" }}>Password:</label>
@@ -101,6 +102,26 @@ const Login = () => {
             style={{ marginBottom: "10px", padding: "8px" }}
             placeholder="Password"
           />
+
+                {/* Test ID Input for Students */}
+                {role === 'student' && (
+                    <div className='testid'>
+                        <label style={{ marginRight: '10px' }}>Test ID:</label>
+                        <input
+                            type="text"
+                            value={testid}
+                            onChange={(e) => setTestid(e.target.value)}
+                            required
+                            style={{ marginBottom: '10px', padding: '8px' }}
+                            placeholder='Test ID'
+                        />
+                    </div>
+                )}
+
+                {/* Login Button */}
+                <button type='submit' style={{ padding: '8px', cursor: 'pointer' }}>Login</button>
+            </form>
+
         </div>
 
         {/* Login Button */}
