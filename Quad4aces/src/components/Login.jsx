@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
 import { app } from '../firebaseConfig'; // Ensure Firebase is initialized
+import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
 import '../styles/Login.css';
 
 const Login = () => {
@@ -10,28 +11,35 @@ const Login = () => {
     const [role, setRole] = useState('student'); // Default role selection
     const navigate = useNavigate();
     const db = getFirestore(app);
+
     useEffect(() => {
-        localStorage.removeItem("user");
+        localStorage.removeItem("user"); // Clear user data on login page load
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Logging in... as '+role);
+        console.log('Logging in as ' + role);
+
         const collectionName = role === 'admin' ? 'admins' : 'students';
-        const q = query(
-            collection(db, collectionName),
-            where('email', '==', email), // Assuming 'username' is used for email
-            where('password', '==', password)
-        );
+        const q = query(collection(db, collectionName), where('email', '==', email)); // Fetch user data
 
         try {
             const snapshot = await getDocs(q);
             if (!snapshot.empty) {
-                localStorage.setItem('user', JSON.stringify({ email, role }));
-                console.log(`Logged in as ${role}`);
-                navigate(role === 'admin' ? '/admin' : '/assessment');
+                const userData = snapshot.docs[0].data(); // Get first matching user
+
+                // Compare entered password with the hashed password stored in Firestore
+                const isPasswordValid = bcrypt.compareSync(password, userData.password);
+
+                if (isPasswordValid) {
+                    localStorage.setItem('user', JSON.stringify({ email, role }));
+                    console.log(`Logged in as ${role}`);
+                    navigate(role === 'admin' ? '/admin' : '/assessment');
+                } else {
+                    alert('Invalid password. Please try again.');
+                }
             } else {
-                alert('Invalid credentials. Please try again.');
+                alert('User not found. Please check your credentials.');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -43,7 +51,7 @@ const Login = () => {
         <div className='container'>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', width: '500px' }}>
                 <div className='login'>Login</div>
-                
+
                 {/* Role Selection Dropdown */}
                 <div className='role-select'>
                     <label>Select Role:</label>
