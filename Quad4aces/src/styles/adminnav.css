@@ -45,7 +45,7 @@ html, body {
   left: 0;
   width: 100%;
   padding: 10px 20px;
-  background: transparent;
+  background: #007bff;
   color: white;
   display: flex;
   justify-content: flex-start;
@@ -96,7 +96,7 @@ html, body {
 }
 
 .dropdown-container:hover .dropdown {
-  display: block;
+  display: flex;
 }
 
 .dropdown li {
