@@ -176,16 +176,16 @@ async function saveProcessedData(filename, questions) {
   }
 
   // Append new data
-  existingData.push({ filename, questions });
+  // existingData.push({ filename, questions });
 
-  // Write back to the file
-  try {
-    fs.writeFileSync(processedTestsPath, JSON.stringify(existingData, null, 2));
-    console.log("✅ Processed Questions Saved in JSON!");
-  } catch (error) {
-    console.error("❌ Error writing JSON file:", error);
-  }
-}
+  // // Write back to the file
+  // try {
+  //   fs.writeFileSync(processedTestsPath, JSON.stringify(existingData, null, 2));
+  //   console.log("✅ Processed Questions Saved in JSON!");
+  // } catch (error) {
+  //   console.error("❌ Error writing JSON file:", error);
+  // }
+
 
 
 
@@ -381,7 +381,7 @@ app.get("/api/get-risk-score", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("A user connected");
-
+  
   socket.on("message", (message) => {
     io.emit("message", message);
   });
@@ -392,8 +392,8 @@ io.on("connection", (socket) => {
 });
 
 // Start server
-server.listen(SOCKET_PORT, () => {
-  console.log(`✅ Server running on port ${SOCKET_PORT}`);
+server.listen(SOCKET_PORT, '127.0.0.1',() => {
+  console.log(`Server running on port ${SOCKET_PORT}`);
 });
 
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, '127.0.0.1',() => console.log(`✅ Server running on port ${PORT}`));
