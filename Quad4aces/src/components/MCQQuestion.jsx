@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../styles/mcq.css";
-const MCQQuestion = ({ questionData, onAnswerUpdate }) => {
-  const { id, questionText, options, student_answer } = questionData;
-  const [selectedOption, setSelectedOption] = useState(student_answer || "");
+
+const MCQQuestion = ({ questionData, currentAnswer, onAnswerUpdate }) => {
+  const { id, questionText, options } = questionData;
+  const [selectedOption, setSelectedOption] = useState(currentAnswer || "");
 
   useEffect(() => {
-    // If the parent's student_answer changes externally, update here
-    setSelectedOption(student_answer || "");
-  }, [student_answer]);
+    setSelectedOption(currentAnswer || "");
+  }, [currentAnswer]);
 
   const handleChange = (e) => {
     setSelectedOption(e.target.value);
@@ -18,19 +18,19 @@ const MCQQuestion = ({ questionData, onAnswerUpdate }) => {
     <div className="mcq-question">
       <h3>{questionText}</h3>
       {options
-      .filter(option => option.trim() !== "") // Remove empty options
-      .map((option, i) => (
-        <label key={i}>
-          <input
-            type="radio"
-            name={`question-${id}`}
-            value={option}
-            checked={selectedOption === option}
-            onChange={handleChange}
-          />
-          {option}
-        </label>
-      ))}
+        .filter(option => option.trim() !== "") // Remove empty options
+        .map((option, i) => (
+          <label key={i}>
+            <input
+              type="radio"
+              name={`question-${id}`}
+              value={option}
+              checked={selectedOption === option}
+              onChange={handleChange}
+            />
+            {option}
+          </label>
+        ))}
     </div>
   );
 };
