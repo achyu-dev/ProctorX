@@ -6,6 +6,23 @@ import Timer from "./Timer";
 import "../styles/assessment.css";
 //import useGlobalStore from "../store";
 
+const enterFullScreen = () => {
+  const elem = document.documentElement;
+  if (!document.fullscreenElement) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
+  }
+};
+
+window.addEventListener("click", () => {
+  enterFullScreen()
+}, { once: true })
+
 const Assessment = () => {
   const [readyTest, setReadyTest] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -128,18 +145,7 @@ const Assessment = () => {
   }, [navigate]);
 
   useEffect(() => {
-    const enterFullScreen = () => {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement) {
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-          elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
-          elem.webkitRequestFullscreen();
-        }
-      }
-    };
+    
 
     const checkFullscreen = () => {
       if (!document.fullscreenElement) {
@@ -173,7 +179,7 @@ const Assessment = () => {
     document.addEventListener("keydown", preventActions);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    enterFullScreen();
+    //enterFullScreen();
 
     return () => {
       document.removeEventListener("fullscreenchange", checkFullscreen);
