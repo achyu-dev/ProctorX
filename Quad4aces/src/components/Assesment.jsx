@@ -43,10 +43,12 @@ const Assessment = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    console.log("User:", user);
     if (user && user.role === "admin") {
       setIsAdmin(true);
     }
   }, []);
+
 
   useEffect(() => {
     fetch("http://localhost:3000/api/ready-test")
