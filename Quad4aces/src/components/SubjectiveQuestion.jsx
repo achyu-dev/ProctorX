@@ -20,6 +20,8 @@ const SubjectiveQuestion = ({ questionData, currentAnswer, onAnswerUpdate }) => 
         value={text}
         onChange={handleChange}
         placeholder="Type your answer here..."
+        rows="10"
+        cols="50"
       />
     </div>
   );
