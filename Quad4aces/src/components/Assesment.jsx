@@ -117,12 +117,16 @@ const Assessment = () => {
         />
         {readyTest.length > 0 && (
           <QuestionRenderer
-            question={readyTest[currentQuestionIndex]}
-            currentAnswer={answersMap[readyTest[currentQuestionIndex].id] || ""}
-            onAnswerUpdate={(id, answer) =>
-              setAnswersMap((prev) => ({ ...prev, [id]: answer }))
-            }
-          />
+          question={readyTest[currentQuestionIndex]}
+          currentAnswer={answersMap[readyTest[currentQuestionIndex].id] || ""}
+          onAnswerUpdate={(id, answer) => {
+            setAnswersMap((prev) => {
+              const updatedAnswers = { ...prev, [id]: answer };
+              console.log("Updated Answers Map:", updatedAnswers); // ✅ Console log the updated state
+              return updatedAnswers;
+            });
+          }}
+        />
         )}
       </div>
       <div className="assessment-footer">
