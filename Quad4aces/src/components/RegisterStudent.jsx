@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, getDoc } from "firebase/firestore";
 import { app } from "../firebaseConfig"; // Ensure Firebase is initialized
 import bcrypt from "bcryptjs";
 
 const RegisterStudent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [testid, setTestid] = useState("");
   const navigate = useNavigate();
   const db = getFirestore(app);
 
@@ -18,11 +19,10 @@ const RegisterStudent = () => {
     }
 
     try {
-      // Check if email already exists
-      const q = query(collection(db, "students"), where("email", "==", email));
-      const querySnapshot = await getDocs(q);
+      const studentRef = doc(db, "students", email); // Use email as document ID
+      const docSnap = await getDoc(studentRef);
 
-      if (!querySnapshot.empty) {
+      if (docSnap.exists()) {
         alert("This email is already registered. Please use a different email.");
         return;
       }
@@ -31,17 +31,16 @@ const RegisterStudent = () => {
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
-      // Add student to Firestore
-      await addDoc(collection(db, "students"), {
+      // Save student with custom ID (email)
+      await setDoc(studentRef, {
         email,
-        password: hashedPassword,
-        testid: "1234",
-        testname: "Test",
+        password: hashedPassword, // Store encrypted password
+        testid: testid,
       });
 
       alert("Student registered successfully!");
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("❌ Registration error:", error);
       alert("Error registering student. Please try again.");
     }
   };
@@ -60,7 +59,7 @@ const RegisterStudent = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
             style={{ marginBottom: "10px", padding: "8px" }}
-            placeholder="Admin Email"
+            placeholder="Student Email"
           />
         </div>
 
@@ -76,6 +75,18 @@ const RegisterStudent = () => {
             placeholder="Password"
           />
         </div>
+        {/* Test ID Input */}
+        <div className="testid">
+          <label style={{ marginRight: "10px" }}>Test ID:</label>
+          <input
+            type="text"
+            value={testid}
+            onChange={(e) => setTestid(e.target.value)}
+            required
+            style={{ marginBottom: "10px", padding: "8px" }}
+            placeholder="Test ID"
+          />
+          </div>
 
         {/* Register Button */}
         <button type="submit" style={{ padding: "8px", cursor: "pointer" }}>Register Student</button>
