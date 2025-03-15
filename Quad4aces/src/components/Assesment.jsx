@@ -11,12 +11,15 @@ const Assessment = () => {
   const [warningVisible, setWarningVisible] = useState(false);
   const [remainingWarnings, setRemainingWarnings] = useState(2);
   const [currentTime, setCurrentTime] = useState("");
+  const [riskScore, setRiskScore] = useState(0); // Added from code 1
   const navigate = useNavigate();
   const testDuration = 7200; // 2 hours in seconds
 
   // Fetch questions
   useEffect(() => {
-    fetch("http://localhost:3000/api/ready-test")
+    const user=JSON.parse(localStorage.getItem("user"));
+    const testid = user.testid;
+    fetch("http://localhost:3000/api/ready-test?testid2="+testid)
       .then((res) => res.json())
       .then((data) => {
         setReadyTest(data);
@@ -38,24 +41,46 @@ const Assessment = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Handle test submission
+  // Handle test submission - keeping code 2's implementation
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+
   const handleSubmit = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (isSubmitting) return; // Prevent duplicate submissions
+    setIsSubmitting(true);
+
     const finalTest = readyTest.map((q) => ({
-      ...q,
-      student_answer: answersMap[q.id] || "",
+        ...q,
+        student_answer: answersMap[q.id] || "", // Ensure correct mapping
     }));
+
+    console.log("📤 Submitting test:", finalTest);
+    finalTest.unshift({mail: user.email});
+    finalTest.unshift({testid: user.testid});
+
+    console.log("📤 Submitting test 2:", finalTest);
     fetch("http://localhost:3000/api/submit-test", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(finalTest),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({answer:finalTest,}),
     })
-      .then((res) => res.json())
-      .then(() => {
-        alert("Test submitted successfully!");
+    .then((res) => res.json())
+    .then((data) => {
+        alert(data.message || "Test submitted successfully!");
         navigate("/");
-      })
-      .catch((err) => console.error("Error submitting test:", err));
-  };
+    })
+    .catch((err) => {
+        console.error("❌ Error submitting test:", err);
+        alert("Failed to submit test. Please try again.");
+    })
+    .finally(() => setIsSubmitting(false));
+};
+
+
+  
+
+  
 
   // Auto-submit on time up
   const handleTimeUp = () => {
@@ -72,7 +97,62 @@ const Assessment = () => {
     }
   };
 
-  // Prevent cheating + force fullscreen
+  // Added risk scoring from code 1
+  useEffect(() => {
+    let mouseMovements = 0;
+    let keyPresses = 0;
+    let lastMouseTime = Date.now();
+    let lastKeyTime = Date.now();
+
+    const trackMouse = () => {
+      const now = Date.now();
+      if (now - lastMouseTime < 100) {
+        mouseMovements += 1;
+      }
+      lastMouseTime = now;
+    };
+
+    const trackKeyPress = () => {
+      const now = Date.now();
+      if (now - lastKeyTime < 50) {
+        keyPresses += 1;
+      }
+      lastKeyTime = now;
+    };
+
+    const calculateRiskScore = () => {
+      let score = 0;
+      if (mouseMovements > 10) score += 10;
+      if (keyPresses > 20) score += 15;
+      setRiskScore(score);
+
+      fetch("http://localhost:3000/api/update-risk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ riskScore: score }),
+      });
+
+      if (score >= 30) {
+        alert("Suspicious activity detected! You are being logged out.");
+        navigate("/");
+      }
+
+      mouseMovements = 0;
+      keyPresses = 0;
+    };
+
+    document.addEventListener("mousemove", trackMouse);
+    document.addEventListener("keydown", trackKeyPress);
+    const interval = setInterval(calculateRiskScore, 5000);
+
+    return () => {
+      document.removeEventListener("mousemove", trackMouse);
+      document.removeEventListener("keydown", trackKeyPress);
+      clearInterval(interval);
+    };
+  }, [navigate]);
+
+  // Prevent cheating + force fullscreen (enhanced with code 1 features)
   useEffect(() => {
     const enterFullScreen = () => {
       const elem = document.documentElement;
@@ -110,13 +190,17 @@ const Assessment = () => {
       }
     };
 
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        showWarning();
+      }
+    };
+
     // Block right-click, shortcuts & visibility change
     document.addEventListener("fullscreenchange", checkFullscreen);
     document.addEventListener("contextmenu", (e) => e.preventDefault());
     document.addEventListener("keydown", preventActions);
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) showWarning();
-    });
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     enterFullScreen(); // Force fullscreen at start
 
@@ -124,13 +208,11 @@ const Assessment = () => {
       document.removeEventListener("fullscreenchange", checkFullscreen);
       document.removeEventListener("contextmenu", (e) => e.preventDefault());
       document.removeEventListener("keydown", preventActions);
-      document.removeEventListener("visibilitychange", () => {
-        if (document.hidden) showWarning();
-      });
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [remainingWarnings]);
 
-  //Format timer
+  // Format timer - keeping this as a component within the Assessment component
   const Timer = ({ duration, onTimeUp }) => {
     const [timeLeft, setTimeLeft] = useState(duration);
 
@@ -178,6 +260,7 @@ const Assessment = () => {
 
       <div className="assessment-header">
         <Timer duration={testDuration} onTimeUp={handleTimeUp} />
+        <p>Risk Score: {riskScore}</p> {/* Added from code 1 */}
       </div>
 
       <div className="assessment-body">
@@ -189,16 +272,16 @@ const Assessment = () => {
         />
         {readyTest.length > 0 && (
           <QuestionRenderer
-          question={readyTest[currentQuestionIndex]}
-          currentAnswer={answersMap[readyTest[currentQuestionIndex].id] || ""}
-          onAnswerUpdate={(id, answer) => {
-            setAnswersMap((prev) => {
-              const updatedAnswers = { ...prev, [id]: answer };
-              console.log("Updated Answers Map:", updatedAnswers); // ✅ Console log the updated state
-              return updatedAnswers;
-            });
-          }}
-        />
+            question={readyTest[currentQuestionIndex]}
+            currentAnswer={answersMap[readyTest[currentQuestionIndex].id] || ""}
+            onAnswerUpdate={(id, answer) => {
+              setAnswersMap((prev) => {
+                const updatedAnswers = { ...prev, [id]: answer };
+                console.log("Updated Answers Map:", updatedAnswers); // Kept from code 2
+                return updatedAnswers;
+              });
+            }}
+          />
         )}
       </div>
 

@@ -9,6 +9,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('student'); // Default role selection
+    const [testid, setTestid] = useState('');
     const navigate = useNavigate();
     const db = getFirestore(app);
 
@@ -32,8 +33,9 @@ const Login = () => {
                 const isPasswordValid = bcrypt.compareSync(password, userData.password);
 
                 if (isPasswordValid) {
-                    localStorage.setItem('user', JSON.stringify({ email, role }));
-                    console.log(`Logged in as ${role}`);
+                    localStorage.setItem('user', JSON.stringify({ email, role, testid }));
+
+                    console.log(`Logged in as ${role}, email: ${email}, testid: ${testid}`);
                     navigate(role === 'admin' ? '/admin' : '/assessment');
                 } else {
                     alert('Invalid password. Please try again.');
@@ -86,6 +88,21 @@ const Login = () => {
                         placeholder='Password'
                     />
                 </div>
+
+                {/* Test ID Input for Students */}
+                {role === 'student' && (
+                    <div className='testid'>
+                        <label style={{ marginRight: '10px' }}>Test ID:</label>
+                        <input
+                            type="text"
+                            value={testid}
+                            onChange={(e) => setTestid(e.target.value)}
+                            required
+                            style={{ marginBottom: '10px', padding: '8px' }}
+                            placeholder='Test ID'
+                        />
+                    </div>
+                )}
 
                 {/* Login Button */}
                 <button type='submit' style={{ padding: '8px', cursor: 'pointer' }}>Login</button>
