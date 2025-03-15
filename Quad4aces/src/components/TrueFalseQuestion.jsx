@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
 
-const TrueFalseQuestion = ({ questionData, onAnswerUpdate }) => {
-  const { id, questionText, student_answer } = questionData;
-  const [selected, setSelected] = useState(student_answer || "");
+const TrueFalseQuestion = ({ questionData, currentAnswer, onAnswerUpdate }) => {
+  const { id, questionText } = questionData;
+  const [selectedOption, setSelectedOption] = useState(currentAnswer || "");
 
   useEffect(() => {
-    setSelected(student_answer || "");
-  }, [student_answer]);
+    setSelectedOption(currentAnswer || "");
+  }, [currentAnswer]);
 
-  const handleChange = (value) => {
-    setSelected(value);
-    onAnswerUpdate(id, value);
+  const handleChange = (e) => {
+    setSelectedOption(e.target.value);
+    onAnswerUpdate(id, e.target.value);
   };
 
   return (
-    <div className="truefalse-question">
+    <div className="true-false-question">
       <h3>{questionText}</h3>
       <label>
         <input
           type="radio"
           name={`question-${id}`}
           value="True"
-          checked={selected === "True"}
-          onChange={() => handleChange("True")}
+          checked={selectedOption === "True"}
+          onChange={handleChange}
         />
         True
       </label>
@@ -31,8 +31,8 @@ const TrueFalseQuestion = ({ questionData, onAnswerUpdate }) => {
           type="radio"
           name={`question-${id}`}
           value="False"
-          checked={selected === "False"}
-          onChange={() => handleChange("False")}
+          checked={selectedOption === "False"}
+          onChange={handleChange}
         />
         False
       </label>
