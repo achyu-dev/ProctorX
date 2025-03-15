@@ -11,9 +11,11 @@ const Assessment = () => {
   const [answersMap, setAnswersMap] = useState({});
   const [warningVisible, setWarningVisible] = useState(false);
   const [remainingWarnings, setRemainingWarnings] = useState(2);
-  const testDuration = 7200; // 2 hours
+  const [currentTime, setCurrentTime] = useState("");
   const navigate = useNavigate();
+  const testDuration = 7200; // 2 hours in seconds
 
+  // Fetch questions
   useEffect(() => {
     fetch("http://localhost:3000/api/ready-test")
       .then((res) => res.json())
@@ -28,15 +30,16 @@ const Assessment = () => {
       .catch((err) => console.error("Error fetching ready test:", err));
   }, []);
 
+  // Update current time every second
   useEffect(() => {
-    const enterFullScreen = () => {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(console.error);
-      }
-    };
-    enterFullScreen();
+    const interval = setInterval(() => {
+      const now = new Date();
+      setCurrentTime(now.toLocaleTimeString("en-US", { hour12: false }));
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
+  // Handle test submission
   const handleSubmit = () => {
     const finalTest = readyTest.map((q) => ({
       ...q,
@@ -47,6 +50,7 @@ const Assessment = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(finalTest),
     })
+      .then((res) => res.json())
       .then(() => {
         alert("Test submitted successfully!");
         navigate("/");
@@ -54,20 +58,45 @@ const Assessment = () => {
       .catch((err) => console.error("Error submitting test:", err));
   };
 
+  // Auto-submit on time up
   const handleTimeUp = () => {
     alert("Time is up! Auto-submitting test.");
     handleSubmit();
   };
 
+  // Show warning if cheating is detected
   const showWarning = () => {
     if (remainingWarnings > 0) {
       setWarningVisible(true);
-      setRemainingWarnings((prev) => Math.max(prev - 1, 0));
-      if (remainingWarnings === 1) handleSubmit();
+      setRemainingWarnings((prev) => prev - 1);
+      if (remainingWarnings === 1) handleSubmit(); // Auto-submit if last warning
     }
   };
 
+  // Prevent cheating + force fullscreen
   useEffect(() => {
+    const enterFullScreen = () => {
+      const elem = document.documentElement;
+      if (!document.fullscreenElement) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        }
+      }
+    };
+
+    const checkFullscreen = () => {
+      if (!document.fullscreenElement) {
+        showWarning();
+        enterFullScreen();
+      }
+    };
+
     const preventActions = (event) => {
       if (event.ctrlKey || event.metaKey || event.altKey) {
         const blockedKeys = ["c", "v", "x", "a", "u", "i", "s", "p", "T", "F5"];
@@ -76,15 +105,24 @@ const Assessment = () => {
           showWarning();
         }
       }
+      if (event.key === "Escape" || event.altKey) {
+        event.preventDefault();
+        showWarning();
+      }
     };
 
+    // Block right-click, shortcuts & visibility change
+    document.addEventListener("fullscreenchange", checkFullscreen);
     document.addEventListener("contextmenu", (e) => e.preventDefault());
     document.addEventListener("keydown", preventActions);
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) showWarning();
     });
 
+    enterFullScreen(); // Force fullscreen at start
+
     return () => {
+      document.removeEventListener("fullscreenchange", checkFullscreen);
       document.removeEventListener("contextmenu", (e) => e.preventDefault());
       document.removeEventListener("keydown", preventActions);
       document.removeEventListener("visibilitychange", () => {
@@ -94,7 +132,7 @@ const Assessment = () => {
   }, [remainingWarnings]);
 
   return (
-    <div className="assessment-container" style={{ userSelect: "none" }}>
+    <div className="assessment-container">
       {warningVisible && (
         <div className="warning-modal">
           <h2>Warning!</h2>
@@ -102,12 +140,12 @@ const Assessment = () => {
           <button onClick={() => setWarningVisible(false)}>OK</button>
         </div>
       )}
+
       <div className="assessment-header">
-        <div className="time-display">
-          Test Duration: {new Date(testDuration * 1000).toISOString().substr(11, 8)}
-        </div>
+        <div className="time-display">Current Time: {currentTime}</div>
         <Timer duration={testDuration} onTimeUp={handleTimeUp} />
       </div>
+
       <div className="assessment-body">
         <Sidebar
           questions={readyTest}
@@ -125,6 +163,7 @@ const Assessment = () => {
           />
         )}
       </div>
+
       <div className="assessment-footer">
         <button onClick={() => setCurrentQuestionIndex((prev) => Math.max(prev - 1, 0))} disabled={currentQuestionIndex === 0}>
           Back
