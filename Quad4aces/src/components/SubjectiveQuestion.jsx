@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-const SubjectiveQuestion = ({ questionData, onAnswerUpdate }) => {
-  const { id, questionText, student_answer } = questionData;
-  const [text, setText] = useState(student_answer || "");
+const SubjectiveQuestion = ({ questionData, currentAnswer, onAnswerUpdate }) => {
+  const { id, questionText } = questionData;
+  const [text, setText] = useState(currentAnswer || "");
 
   useEffect(() => {
-    setText(student_answer || "");
-  }, [student_answer]);
+    setText(currentAnswer || "");
+  }, [currentAnswer]);
 
   const handleChange = (e) => {
     setText(e.target.value);
