@@ -1,0 +1,101 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom right, 
+    #3D52A0, 
+    #7091E6, 
+    #8697C4, 
+    #ADBDBA, 
+    #EDE8F5);
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-start; /* Aligns logo to the left */
+    align-items: center;
+    gap: 3rem; /* Adds space between logo and nav links */
+    padding-bottom: 1rem;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    position: absolute;
+    top: 0.5rem;
+    left: 1rem;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    padding-top: 1rem; /* Adjusts the position of the nav bar */
+}
+
+.nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 0;
+}
+
+.nav li {
+    cursor: pointer;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-top: 3rem;
+    margin-left: 5%; /* Shifts content slightly to the left */
+}
+
+.content {
+    max-width: 450px;
+    text-align: left;  /* Aligns text content to the left */
+}
+
+.title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.description {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.btn {
+    background-color: #ff4081;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #e91e63;
+}
+
+.image-container .image {
+    width: 350px;
+    filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
+}
+
+.footer {
+    text-align: center;
+    margin-top: 2rem;
+}

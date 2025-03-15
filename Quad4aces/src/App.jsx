@@ -6,13 +6,15 @@ import AdminHome from "./pages/AdminHome";
 import UploadTest from "./components/UploadTest";
 import PreviousTests from "./components/PreviousTests";
 import EditTest from "./components/EditTest";
+import LandingPage from "./components/LandingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterStudent from "./components/RegisterStudent";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegisterAdmin />} />
 
       {/* Admin Protected Routes */}

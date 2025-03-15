@@ -1,107 +1,159 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom right, 
+      #3D52A0, 
+      #7091E6, 
+      #8697C4, 
+      #ADBDBA, 
+      #EDE8F5
+  );
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+/* Admin Title - Fixed Top Left */
+.admin-header {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  font-size: 22px;
+  color: #fff;
+  font-weight: bold;
+  z-index: 10; /* Ensures it's above other elements */
+}
+
+/* Navigation Bar */
 .admin-nav {
-    background: #007bff;
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  display: flex;
+  justify-content: flex-start; /* Aligns logo to the left */
+  align-items: center;
+  gap: 3rem; /* Adds space between logo and nav links */
   
-  .admin-nav h2 {
-    margin: 0;
-    font-size: 22px;
-  }
-  
-  .admin-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 20px;
-  }
-  
-  .admin-nav ul li {
-    position: relative;
-    padding: 10px;
-  }
-  
-  .admin-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 8px 12px;
-    display: inline-block;
-  }
-  
-  .admin-nav a:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
-  }
-  
-  /* Dropdown */
-  .dropdown {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    background: white;
-    color: black;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 150px;
-    display: none;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-  }
-  
-  .dropdown li {
-    padding: 10px;
-  }
-  
-  .dropdown li a {
-    color: black;
-    padding: 10px;
-    display: block;
-    width: 100%;
-  }
-  
-  .dropdown li a:hover {
-    background: #007bff;
-    color: white;
-    border-radius: 0;
-  }
-  
-  /* Show dropdown on hover */
-  .admin-nav ul li:hover .dropdown {
-    display: block;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .admin-nav {
+}
+
+.admin-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+.admin-nav ul li {
+  position: relative;
+}
+
+.admin-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 12px;
+  display: inline-block;
+}
+
+.admin-nav a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+/* Base Dropdown (Hidden by Default) */
+.dropdown {
+  display: none; /* Ensures dropdown is hidden initially */
+  position: absolute; 
+  top: 100%; 
+  left: 0;
+  background: white;
+  color: black;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 150px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+/* Show Dropdown on Hover */
+li:hover .dropdown {
+  display: block;  /* Dropdown appears only when hovering */
+}
+
+/* Dropdown List Items */
+.dropdown li {
+  padding: 10px;
+}
+
+.dropdown li a {
+  color: black;
+  padding: 10px;
+  display: block;
+  width: 100%;
+}
+
+.dropdown li a:hover {
+  background: #007bff;
+  color: white;
+  border-radius: 0;
+}
+
+.content {
+  margin-top: 100px; /* Adjusts content position to avoid overlapping */
+  padding: 20px;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .admin-nav {
       flex-direction: column;
       text-align: center;
-    }
-  
-    .admin-nav ul {
+      padding: 10px 0;
+  }
+
+  .admin-nav ul {
       flex-direction: column;
       gap: 10px;
-    }
-  
-    .admin-nav ul li {
-      width: 100%;
-    }
-  
-    .dropdown {
-      position: static;
-      display: block;
-      background: transparent;
-      box-shadow: none;
-      width: auto;
-    }
-  
-    .dropdown li {
-      padding-left: 20px;
-    }
   }
-  
+
+  .admin-nav ul li {
+      width: 100%;
+  }
+
+  .dropdown {
+      position: static;  /* Ensures dropdown appears in flow */
+      display: none;     /* Hidden until hover */
+      background: #f9f9f9; 
+      box-shadow: none;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px; 
+  }
+
+  li:hover .dropdown {
+      display: block;  /* Dropdown appears on hover */
+  }
+
+  .dropdown li {
+      padding: 10px 20px;
+      text-align: left;
+  }
+
+  .dropdown li a {
+      color: #007bff;
+      display: block;
+  }
+
+  .dropdown li a:hover {
+      background: #007bff;
+      color: #fff;
+  }
+}
