@@ -5,10 +5,10 @@ const AdminHome = () => {
   return (
     <div>
       <AdminNav />
-      <div className="content">
-        <h1>Ongoing Tests</h1>
-        <OngoingTests />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'top', justifyContent: 'center', height: '40vh' }}>
+        <h1 style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '40vh' }} >Ongoing Tests</h1>
       </div>
+      <OngoingTests />
     </div>
   );
 };

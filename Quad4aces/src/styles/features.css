@@ -1,0 +1,71 @@
+.features-container {
+    background: linear-gradient(to bottom right, 
+    #3D52A0, 
+    #7091E6, 
+    #8697C4, 
+    #ADBDBA, 
+    #EDE8F5
+);
+    color: #fff;
+    text-align: center;
+    padding: 50px 20px;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.features-list {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 20px;
+    width: 250px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out, background 0.3s;
+}
+
+.feature-card h2 {
+    margin: 0;
+    color: #FFD700;  /* Gold for emphasis */
+}
+
+.feature-card.active {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #FFD700;
+    transform: scale(1.05);
+}
+
+.feature-card p {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #e0e0e0;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.features-footer {
+    margin-top: 40px;
+    font-weight: bold;
+    color: #FFD700;
+}
+

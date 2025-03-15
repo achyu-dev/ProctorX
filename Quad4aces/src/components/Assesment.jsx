@@ -2,7 +2,30 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import QuestionRenderer from "./QuestionRender";
 import Sidebar from "./Sidebar";
+import Timer from "./Timer";
 import "../styles/assessment.css";
+import Chatsupport from "./chatsupport";
+
+const enterFullScreen = () => {
+  const elem = document.documentElement;
+  if (!document.fullscreenElement) {
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
+  }
+};
+
+window.addEventListener(
+  "click",
+  () => {
+    enterFullScreen();
+  },
+  { once: true }
+);
 
 const Assessment = () => {
   const [readyTest, setReadyTest] = useState([]);
@@ -15,7 +38,16 @@ const Assessment = () => {
   const navigate = useNavigate();
   const testDuration = 7200; // 2 hours in seconds
 
-  // Fetch questions
+  // check admin side
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.role === "admin") {
+      setIsAdmin(true);
+    }
+  }, []);
+
   useEffect(() => {
     const user=JSON.parse(localStorage.getItem("user"));
     const testid = user.testid;
@@ -32,7 +64,6 @@ const Assessment = () => {
       .catch((err) => console.error("Error fetching ready test:", err));
   }, []);
 
-  // Update current time every second
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
@@ -41,10 +72,9 @@ const Assessment = () => {
     return () => clearInterval(interval);
   }, []);
 
+
   // Handle test submission - keeping code 2's implementation
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-
   const handleSubmit = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (isSubmitting) return; // Prevent duplicate submissions
@@ -65,9 +95,9 @@ const Assessment = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({answer:finalTest,}),
     })
-    .then((res) => res.json())
-    .then((data) => {
-        alert(data.message || "Test submitted successfully!");
+
+      .then(() => {
+        alert("Test submitted successfully!");
         navigate("/");
     })
     .catch((err) => {
@@ -82,20 +112,19 @@ const Assessment = () => {
 
   
 
-  // Auto-submit on time up
   const handleTimeUp = () => {
     alert("Time is up! Auto-submitting test.");
     handleSubmit();
   };
 
-  // Show warning if cheating is detected
   const showWarning = () => {
     if (remainingWarnings > 0) {
       setWarningVisible(true);
       setRemainingWarnings((prev) => prev - 1);
-      if (remainingWarnings === 1) handleSubmit(); // Auto-submit if last warning
+      if (remainingWarnings === 1) handleSubmit();
     }
   };
+
 
   // Added risk scoring from code 1
   useEffect(() => {
@@ -154,21 +183,60 @@ const Assessment = () => {
 
   // Prevent cheating + force fullscreen (enhanced with code 1 features)
   useEffect(() => {
-    const enterFullScreen = () => {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement) {
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-          elem.mozRequestFullScreen();
-        } else if (elem.webkitRequestFullscreen) {
-          elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-          elem.msRequestFullscreen();
-        }
+    let mouseMovements = 0;
+    let keyPresses = 0;
+    let lastMouseTime = Date.now();
+    let lastKeyTime = Date.now();
+
+    const trackMouse = () => {
+      const now = Date.now();
+      if (now - lastMouseTime < 100) {
+        mouseMovements += 1;
       }
+      lastMouseTime = now;
     };
 
+    const trackKeyPress = () => {
+      const now = Date.now();
+      if (now - lastKeyTime < 50) {
+        keyPresses += 1;
+      }
+      lastKeyTime = now;
+    };
+
+    const calculateRiskScore = () => {
+      let score = 0;
+      if (mouseMovements > 10) score += 10;
+      if (keyPresses > 20) score += 15;
+      setRiskScore(score);
+
+      fetch("http://localhost:3000/api/update-risk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ riskScore: score }),
+      });
+
+      if (score >= 30) {
+        alert("Suspicious activity detected! You are being logged out.");
+        navigate("/");
+      }
+
+      mouseMovements = 0;
+      keyPresses = 0;
+    };
+
+    document.addEventListener("mousemove", trackMouse);
+    document.addEventListener("keydown", trackKeyPress);
+    const interval = setInterval(calculateRiskScore, 5000);
+
+    return () => {
+      document.removeEventListener("mousemove", trackMouse);
+      document.removeEventListener("keydown", trackKeyPress);
+      clearInterval(interval);
+    };
+  }, [navigate]);
+
+  useEffect(() => {
     const checkFullscreen = () => {
       if (!document.fullscreenElement) {
         showWarning();
@@ -202,7 +270,7 @@ const Assessment = () => {
     document.addEventListener("keydown", preventActions);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    enterFullScreen(); // Force fullscreen at start
+    //enterFullScreen();
 
     return () => {
       document.removeEventListener("fullscreenchange", checkFullscreen);
@@ -277,7 +345,7 @@ const Assessment = () => {
             onAnswerUpdate={(id, answer) => {
               setAnswersMap((prev) => {
                 const updatedAnswers = { ...prev, [id]: answer };
-                console.log("Updated Answers Map:", updatedAnswers); // Kept from code 2
+                console.log("Updated Answers Map:", updatedAnswers); // ✅ Console log the updated state
                 return updatedAnswers;
               });
             }}
@@ -306,6 +374,9 @@ const Assessment = () => {
         </button>
         <button onClick={handleSubmit}>Submit Test</button>
       </div>
+      <br />
+      <br />
+      <Chatsupport isAdmin={isAdmin} />
     </div>
   );
 };
