@@ -1,30 +1,35 @@
 import React, { useState, useEffect } from "react";
 import "../styles/timer.css";
+
 const Timer = ({ duration, onTimeUp }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
 
   useEffect(() => {
-    if (timeLeft <= 0) {
-      onTimeUp();
-      return;
-    }
-    const timerId = setInterval(() => {
-      setTimeLeft(prev => prev - 1);
+    const timer = setInterval(() => {
+      setTimeLeft((prevTimeLeft) => {
+        if (prevTimeLeft <= 1) {
+          clearInterval(timer);
+          onTimeUp();
+          return 0;
+        }
+        return prevTimeLeft - 1;
+      });
     }, 1000);
-    return () => clearInterval(timerId);
-  }, [timeLeft, onTimeUp]);
+
+    return () => clearInterval(timer);
+  }, [duration, onTimeUp]);
 
   const formatTime = (seconds) => {
-    const min = Math.floor(seconds / 60);
-    const sec = seconds % 60;
-    return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}:${String(secs).padStart(2, "0")}`;
   };
 
-  return (
-    <div className="timer">
-      <h3>Time Left: {formatTime(timeLeft)}</h3>
-    </div>
-  );
+  return <h2>Time Left: {formatTime(timeLeft)}</h2>;
 };
 
 export default Timer;
