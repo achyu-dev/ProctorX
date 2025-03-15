@@ -1,13 +1,26 @@
 const express = require("express");
 const { json } = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
 const multer = require("multer");
 const pdfParse = require("pdf-parse");
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
-
+//nst requestIp = require("request-ip");
 const app = express();
-const PORT = 3000;
+
+const server = http.createServer(app); // Use http server
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173", // Update with your frontend URL
+    methods: ["GET", "POST"],
+  },
+});
+
+const PORT = 3000;  
+const SOCKET_PORT = 3001;
+
 
 // ✅ Allow requests from your frontend
 app.use(
@@ -269,6 +282,26 @@ app.get("/api/check-vpn-proxy", async (req, res) => {
 app.get("/api/get-risk-score", (req, res) => {
   const data = fs.readFileSync(riskScoresPath, "utf8");
   res.json(JSON.parse(data));
+});
+
+
+// Socket.io setup
+
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  socket.on("message", (message) => {
+    io.emit("message", message);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
+  });
+});
+
+// Start server
+server.listen(SOCKET_PORT, () => {
+  console.log(`✅ Server running on port ${SOCKET_PORT}`);
 });
 
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

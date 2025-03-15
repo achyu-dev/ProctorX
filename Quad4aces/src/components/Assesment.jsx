@@ -4,7 +4,7 @@ import QuestionRenderer from "./QuestionRender";
 import Sidebar from "./Sidebar";
 import Timer from "./Timer";
 import "../styles/assessment.css";
-//import useGlobalStore from "../store";
+import Chatsupport from "./chatsupport";
 
 const enterFullScreen = () => {
   const elem = document.documentElement;
@@ -19,9 +19,13 @@ const enterFullScreen = () => {
   }
 };
 
-window.addEventListener("click", () => {
-  enterFullScreen()
-}, { once: true })
+window.addEventListener(
+  "click",
+  () => {
+    enterFullScreen();
+  },
+  { once: true }
+);
 
 const Assessment = () => {
   const [readyTest, setReadyTest] = useState([]);
@@ -34,9 +38,15 @@ const Assessment = () => {
   const navigate = useNavigate();
   const testDuration = 7200; // 2 hours in seconds
 
-  // Force full screen
-  // const setFullscreen = useGlobalStore((state) => state.setFullscreen);
-  // const isFullscreen = useGlobalStore((state) => state.isFullscreen);
+  // check admin side
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.role === "admin") {
+      setIsAdmin(true);
+    }
+  }, []);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/ready-test")
@@ -145,8 +155,6 @@ const Assessment = () => {
   }, [navigate]);
 
   useEffect(() => {
-    
-
     const checkFullscreen = () => {
       if (!document.fullscreenElement) {
         showWarning();
@@ -215,16 +223,16 @@ const Assessment = () => {
         />
         {readyTest.length > 0 && (
           <QuestionRenderer
-          question={readyTest[currentQuestionIndex]}
-          currentAnswer={answersMap[readyTest[currentQuestionIndex].id] || ""}
-          onAnswerUpdate={(id, answer) => {
-            setAnswersMap((prev) => {
-              const updatedAnswers = { ...prev, [id]: answer };
-              console.log("Updated Answers Map:", updatedAnswers); // ✅ Console log the updated state
-              return updatedAnswers;
-            });
-          }}
-        />
+            question={readyTest[currentQuestionIndex]}
+            currentAnswer={answersMap[readyTest[currentQuestionIndex].id] || ""}
+            onAnswerUpdate={(id, answer) => {
+              setAnswersMap((prev) => {
+                const updatedAnswers = { ...prev, [id]: answer };
+                console.log("Updated Answers Map:", updatedAnswers); // ✅ Console log the updated state
+                return updatedAnswers;
+              });
+            }}
+          />
         )}
       </div>
 
@@ -249,9 +257,11 @@ const Assessment = () => {
         </button>
         <button onClick={handleSubmit}>Submit Test</button>
       </div>
+      <br />
+      <br />
+      <Chatsupport isAdmin={isAdmin} />
     </div>
   );
 };
-
 
 export default Assessment;
