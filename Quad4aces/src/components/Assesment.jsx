@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import QuestionRenderer from "./QuestionRender";
 import Sidebar from "./Sidebar";
+import Timer from "./Timer";
 import "../styles/assessment.css";
 
 const Assessment = () => {
@@ -130,39 +131,6 @@ const Assessment = () => {
     };
   }, [remainingWarnings]);
 
-  //Format timer
-  const Timer = ({ duration, onTimeUp }) => {
-    const [timeLeft, setTimeLeft] = useState(duration);
-
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setTimeLeft((prevTimeLeft) => {
-          if (prevTimeLeft <= 1) {
-            clearInterval(timer);
-            onTimeUp();
-            return 0;
-          }
-          return prevTimeLeft - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(timer);
-    }, [onTimeUp]);
-
-    const formatTime = (seconds) => {
-      const hours = Math.floor(seconds / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      const secs = seconds % 60;
-      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-        2,
-        "0"
-      )}:${String(secs).padStart(2, "0")}`;
-    };
-
-    return (
-      <div className="timer-display">Time Left: {formatTime(timeLeft)}</div>
-    );
-  };
 
   return (
     <div className="assessment-container">
