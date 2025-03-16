@@ -164,12 +164,6 @@ const Assessment = () => {
       if (mouseMovements > 10) score += 10;
       if (keyPresses > 20) score += 15;
       setRiskScore(score);
-
-      // fetch("http://localhost:3000/api/update-risk", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ riskScore: score }),
-      // });
       const user=JSON.parse(localStorage.getItem("user"));
       const testid = user.testid;
       const testRef = doc(db, "students", user.email);

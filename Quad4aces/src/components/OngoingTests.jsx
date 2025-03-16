@@ -73,7 +73,8 @@ const TestParticipants = ({ testId, testName, status }) => {
         {students.length > 0 ? (
           students.map((student) => (
             <li key={student.email}>
-              <strong>{student.email}</strong> - Risk Score: {student.riskScore} - Status: {student.active}
+              <strong>{student.email}</strong> 
+              {/* - Risk Score: {student.riskScore} - Status: {student.active} */}
             </li>
           ))
         ) : (
