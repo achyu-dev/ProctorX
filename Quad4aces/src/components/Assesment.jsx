@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getFirestore, collection, getDocs, query, where, doc, setDoc, Timestamp } from 'firebase/firestore';
 import QuestionRenderer from "./QuestionRender";
+import { db } from "../firebaseConfig";
 import Sidebar from "./Sidebar";
 import Timer from "./Timer";
 import "../styles/assessment.css";
@@ -77,8 +79,16 @@ const Assessment = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = () => {
     const user = JSON.parse(localStorage.getItem("user"));
+
     if (isSubmitting) return; // Prevent duplicate submissions
     setIsSubmitting(true);
+
+      const testRef = doc(db, "students", user.email);
+      setDoc(testRef, {
+          logout_time: Timestamp.now(),
+          active: false, // ✅ Stores the current timestamp
+        }, { merge: true });
+  
 
     const finalTest = readyTest.map((q) => ({
         ...q,
