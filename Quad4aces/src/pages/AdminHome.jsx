@@ -16,7 +16,7 @@ const AdminHome = () => {
                   fontWeight: 700,
                   color: '#F1F8FE', /* Softer blue for improved readability */
                   textShadow: '3px 3px 8px rgba(0, 0, 0, 0.7)',
-                  marginLeft: '250px' /* Move the h1 a bit to the right */
+                  marginLeft: '50px' /* Move the h1 a bit to the right */
          }} >Ongoing Tests</h1>
       </div>
       <OngoingTests />

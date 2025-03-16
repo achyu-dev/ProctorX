@@ -45,12 +45,19 @@ html, body {
   left: 0;
   width: 100%;
   padding: 10px 20px;
-  background: #007bff;
+  background: transparent;
   color: white;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 3rem;
+  flex-direction: 'column'; 
+  align-items: 'top';  
+  font-size: 20px;
+  font-weight: 700;
+  color: #F1F8FE; /* Softer blue for improved readability */
+  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7);
+  margin-left: 50px; 
 }
 
 .admin-nav ul {

@@ -6,6 +6,10 @@
     padding: 40px 20px;     /* Adequate spacing */
 }
 
+.name{
+    color: white;
+}
+
 .test-card {
     background-color: #ffffff;
     color: #333;
@@ -15,6 +19,9 @@
     width: 300px;           /* Standard card size */
     text-align: center;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin: 10px;
+    position: relative;
+    top: -10px;             /* Moves the card 10px higher */
 }
 
 .test-card:hover {
