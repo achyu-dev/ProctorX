@@ -11,7 +11,7 @@ const OngoingTests = () => {
     <div className="tests-container">
       {tests.map((test) => (
         <div key={test.id} className="test-card">
-          <h3>{test.name}</h3>
+          <h3 className='name'>{test.name}</h3>
           <p className={`status ${test.status.toLowerCase()}`}>
             Status: {test.status}
           </p>

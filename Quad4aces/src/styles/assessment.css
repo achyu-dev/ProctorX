@@ -1,4 +1,5 @@
 body {
+  
   background: linear-gradient(135deg, #7BA7F9, #A8C1F9, #D1DDF9);
   font-family: 'Arial', sans-serif;
   color: #333;
@@ -11,8 +12,10 @@ body {
 }
 
 .assessment-container {
-  width: 90%;
+  width: 100%;
   max-width: 1200px;
+  min-height: 600px; /* Ensures the layout doesn't shrink */
+  max-height: 700px; /* Prevents excessive growth */
   background: rgba(255, 255, 255, 0.9);
   border-radius: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
@@ -20,6 +23,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  box-sizing: border-box;
+  
 }
 
 .assessment-header {
@@ -35,7 +40,7 @@ body {
 
 .assessment-body {
   display: flex;
-  gap: 20px;
+  gap: 20px; 
 }
 
 .sidebar {
@@ -46,13 +51,7 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.question-renderer {
-  flex: 1;
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+
 
 .assessment-footer {
   display: flex;

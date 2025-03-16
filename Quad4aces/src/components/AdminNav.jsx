@@ -24,13 +24,7 @@ const AdminNav = () => {
                         onMouseEnter={toggleDropdown}
                         onMouseLeave={toggleDropdown}
                     >
-                        <a href="#">Tests</a>
-                        {isDropdownOpen && (
-                            <ul className="dropdown">
-                                <li><a href="/upload">Upload Test</a></li>
-                                <li><a href="/previous-tests">Previous Tests</a></li>
-                            </ul>
-                        )}
+                        <a href="/upload">Upload Tests</a>
                     </li>
                     <li>
                         <a href="/reports">Reports</a>

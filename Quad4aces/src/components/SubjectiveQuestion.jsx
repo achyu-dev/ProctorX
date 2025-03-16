@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "../styles/assessment.css";
 import { Navigate } from "react-router";
 
+
 const SubjectiveQuestion = ({ questionData, currentAnswer, onAnswerUpdate, readyTest }) => {
     const { id, questionText } = questionData;
     const [text, setText] = useState(currentAnswer || "");
