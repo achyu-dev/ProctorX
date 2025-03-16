@@ -17,12 +17,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 2rem;
-    background: linear-gradient(to bottom right, 
-    #3D52A0, 
-    #7091E6, 
-    #8697C4, 
-    #ADBDBA, 
-    #EDE8F5);
+    background: transparent;
 }
 
 .header {
