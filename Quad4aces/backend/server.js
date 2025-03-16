@@ -379,6 +379,27 @@ app.get("/api/get-risk-score", (req, res) => {
 
 // Socket.io setup
 
+let chatMessages = [];
+
+// Socket.io connection for chat
+io.on("connection", (socket) => {
+    console.log("A user connected:", socket.id);
+
+    // When a user sends a message
+    socket.on("sendMessage", (messageData) => {
+        chatMessages.push(messageData); // Store the message
+        console.log("Message received:", messageData);
+        io.emit("receiveMessage", messageData); // Broadcast to all clients
+    });
+
+    // Send chat history to newly connected users
+    socket.emit("chatHistory", chatMessages);
+
+    socket.on("disconnect", () => {
+        console.log("A user disconnected:", socket.id);
+    });
+});
+
 io.on("connection", (socket) => {
   console.log("A user connected");
   

@@ -26,7 +26,7 @@ const Timer = ({ duration, onTimeUp }) => {
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
       2,
       "0"
-    )}:${String(secs).padStart(2, "0")}`;
+    )}:${String(secs).padStart(1, "0")}`;
   };
 
   return <h2>Time Left: {formatTime(timeLeft)}</h2>;

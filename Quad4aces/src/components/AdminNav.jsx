@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/adminnav.css';  // Assuming the CSS file is stored in 'styles/adminnav.css'
-
+import {Link} from 'react-router-dom';
 const AdminNav = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -34,6 +34,9 @@ const AdminNav = () => {
                     </li>
                     <li>
                         <a href="/settings">Settings</a>
+                    </li>
+                    <li>
+                        <a href="/chats">Chats</a>
                     </li>
                 </ul>
             </nav>
