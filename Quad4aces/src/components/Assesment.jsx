@@ -34,7 +34,7 @@ const Assessment = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answersMap, setAnswersMap] = useState({});
   const [warningVisible, setWarningVisible] = useState(false);
-  const [remainingWarnings, setRemainingWarnings] = useState(2);
+  const [remainingWarnings, setRemainingWarnings] = useState(1);
   const [currentTime, setCurrentTime] = useState("");
   const [riskScore, setRiskScore] = useState(0); // Added from code 1
   const navigate = useNavigate();
@@ -165,11 +165,17 @@ const Assessment = () => {
       if (keyPresses > 20) score += 15;
       setRiskScore(score);
 
-      fetch("http://localhost:3000/api/update-risk", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ riskScore: score }),
-      });
+      // fetch("http://localhost:3000/api/update-risk", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ riskScore: score }),
+      // });
+      const user=JSON.parse(localStorage.getItem("user"));
+      const testid = user.testid;
+      const testRef = doc(db, "students", user.email);
+      setDoc(testRef, {
+          risk_score: score,
+        }, { merge: true });
 
       if (score >= 30) {
         alert("Suspicious activity detected! You are being logged out.");
@@ -291,38 +297,6 @@ const Assessment = () => {
   }, [remainingWarnings]);
 
   // Format timer - keeping this as a component within the Assessment component
-  const Timer = ({ duration, onTimeUp }) => {
-    const [timeLeft, setTimeLeft] = useState(duration);
-
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setTimeLeft((prevTimeLeft) => {
-          if (prevTimeLeft <= 1) {
-            clearInterval(timer);
-            onTimeUp();
-            return 0;
-          }
-          return prevTimeLeft - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(timer);
-    }, [onTimeUp]);
-
-    const formatTime = (seconds) => {
-      const hours = Math.floor(seconds / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      const secs = seconds % 60;
-      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-        2,
-        "0"
-      )}:${String(secs).padStart(2, "0")}`;
-    };
-
-    return (
-      <div className="timer-display">Time Left: {formatTime(timeLeft)}</div>
-    );
-  };
 
   return (
     <div className="assessment-container">

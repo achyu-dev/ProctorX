@@ -12,6 +12,8 @@ import RegisterStudent from "./components/RegisterStudent";
 import ContactPage from "./components/Contact";
 import About from "./components/About";
 import Features from "./components/Features";
+import AdminChat from "./components/AdminChat";
+import AdminTests from "./components/AdminTests";
 
 function App() {
   return (
@@ -29,6 +31,10 @@ function App() {
       <Route path="/previous-tests" element={<ProtectedRoute requiredRole="admin"><PreviousTests /></ProtectedRoute>} />
       <Route path="/edit-test" element={<ProtectedRoute requiredRole="admin"><EditTest /></ProtectedRoute>} />
       <Route path="/register-student" element={<ProtectedRoute requiredRole="admin"><RegisterStudent /></ProtectedRoute>} />
+      <Route path="reports" element={<ProtectedRoute requiredRole="admin"><AdminTests/></ProtectedRoute>} />
+
+      {/* Chat Protected Route */}
+      <Route path="/chats" element={<ProtectedRoute requiredRole="admin"><AdminChat /></ProtectedRoute>} />
 
       {/* Student Protected Route */}
       <Route path="/assessment" element={<ProtectedRoute requiredRole="student"><Assesment /></ProtectedRoute>} />
