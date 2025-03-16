@@ -1,7 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../styles/landingpage.css'; // Importing the updated CSS file
+import { Link } from 'react-router-dom';
 
 function LandingPage() {
+  useEffect(() => {
+    localStorage.removeItem('user'); // Clear user data on landing page load
+  }, []);
     const handle = () => {
         // Redirect to the login page
         window.location.href = '/login';
@@ -12,10 +16,10 @@ function LandingPage() {
         <h1 className="logo">ProctorX</h1>
         <nav className="nav">
           <ul>
-            <li>Home</li>
-            <li>About Us</li>
-            <li>Features</li>
-            <li>Contact</li>
+            <li className='l1'><Link className='link1' to="/">Home</Link></li>
+            <li className='l2'><Link className='link2' to="/about">About Us</Link></li>
+            <li className='l3'><Link className='link3'  to="/features">Features</Link></li>
+            <li className='l4'><Link className='link4'  to="/contact">Contact</Link></li>
           </ul>
         </nav>
       </header>

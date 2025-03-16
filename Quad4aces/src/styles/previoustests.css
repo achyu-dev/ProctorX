@@ -1,0 +1,45 @@
+.tests-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: transparent; /* Darker background for better contrast */
+}
+
+.header {
+    font-size: 30px;
+    font-weight: 700;
+    color: #F1F8FE; /* Softer blue for improved readability */
+    margin-bottom: 25px;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.7); /* Enhanced text depth */
+}
+
+.test-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 15px 25px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.test-card:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.test-card h3 {
+    margin: 0;
+    font-weight: bold;
+    color: #FFA726; /* Warm orange for improved focus */
+    letter-spacing: 0.5px;
+}
+
+.test-card p {
+    margin: 5px 0 0;
+    color: #E3F2FD;
+    font-weight: 500;
+}

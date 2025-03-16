@@ -9,7 +9,9 @@ import EditTest from "./components/EditTest";
 import LandingPage from "./components/LandingPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterStudent from "./components/RegisterStudent";
-import AdminChat from "./components/AdminChat";
+import ContactPage from "./components/Contact";
+import About from "./components/About";
+import Features from "./components/Features";
 
 function App() {
   return (
@@ -17,6 +19,9 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegisterAdmin />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/features" element={<Features />} />
 
       {/* Admin Protected Routes */}
       <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminHome /></ProtectedRoute>} />
@@ -25,9 +30,6 @@ function App() {
       <Route path="/edit-test" element={<ProtectedRoute requiredRole="admin"><EditTest /></ProtectedRoute>} />
       <Route path="/register-student" element={<ProtectedRoute requiredRole="admin"><RegisterStudent /></ProtectedRoute>} />
 
-      {/* Chat Protected Route */}
-      <Route path="/chats" element={<ProtectedRoute requiredRole="admin"><AdminChat /></ProtectedRoute>} />
-  
       {/* Student Protected Route */}
       <Route path="/assessment" element={<ProtectedRoute requiredRole="student"><Assesment /></ProtectedRoute>} />
     </Routes>
