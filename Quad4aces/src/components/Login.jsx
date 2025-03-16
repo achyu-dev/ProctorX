@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, query, where, doc, setDoc, Timestamp } from 'firebase/firestore';
 import { app } from '../firebaseConfig'; // Ensure Firebase is initialized
 import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
 import '../styles/Login.css';
@@ -34,6 +34,13 @@ const Login = () => {
 
                 if (isPasswordValid) {
                     localStorage.setItem('user', JSON.stringify({ email, role, testid }));
+                    if(role==='student'){
+                        const testRef = doc(db, "students", email);
+                        await setDoc(testRef, {
+                            login_time: Timestamp.now(),
+                            active: true, // ✅ Stores the current timestamp
+                          }, { merge: true });
+                    }
 
                     console.log(`Logged in as ${role}, email: ${email}, testid: ${testid}`);
                     navigate(role === 'admin' ? '/admin' : '/assessment');
