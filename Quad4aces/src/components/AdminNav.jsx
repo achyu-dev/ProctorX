@@ -36,6 +36,9 @@ const AdminNav = () => {
                         <a href="/reports">Reports</a>
                     </li>
                     <li>
+                        <a href="/register-student">Register Student</a>
+                    </li>
+                    <li>
                         <a href="/settings">Settings</a>
                     </li>
                 </ul>

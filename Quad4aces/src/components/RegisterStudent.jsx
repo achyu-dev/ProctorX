@@ -13,8 +13,8 @@ const RegisterStudent = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      alert("Please enter email and password.");
+    if (!email || !password || !testid) {
+      alert("Please enter email, password, and test ID.");
       return;
     }
 
@@ -31,11 +31,22 @@ const RegisterStudent = () => {
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
-      // Save student with custom ID (email)
-      await setDoc(studentRef, {
+      // ✅ Save student with custom ID (email)
+      setDoc(studentRef, {
         email,
         password: hashedPassword, // Store encrypted password
         testid: testid,
+        active: false,
+        risk_score: 0,
+        login_time: null,
+        logout_time: null,
+      });
+
+      // ✅ Add student to the "student_list" inside the test
+      const studentListRef = doc(db, "tests", testid, "student_list", email);
+      await setDoc(studentListRef, {
+        email,
+        registeredAt: new Date(),
       });
 
       alert("Student registered successfully!");
@@ -75,6 +86,7 @@ const RegisterStudent = () => {
             placeholder="Password"
           />
         </div>
+
         {/* Test ID Input */}
         <div className="testid">
           <label style={{ marginRight: "10px" }}>Test ID:</label>
@@ -86,7 +98,7 @@ const RegisterStudent = () => {
             style={{ marginBottom: "10px", padding: "8px" }}
             placeholder="Test ID"
           />
-          </div>
+        </div>
 
         {/* Register Button */}
         <button type="submit" style={{ padding: "8px", cursor: "pointer" }}>Register Student</button>

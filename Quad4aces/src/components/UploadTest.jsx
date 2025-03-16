@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import "../styles/uploadtest.css";
+import { db } from "../firebaseConfig";
+import { doc, updateDoc, arrayUnion, setDoc, getDoc } from "firebase/firestore";
 
 const UploadTest = () => {
   const [file, setFile] = useState(null);
@@ -47,13 +49,36 @@ const UploadTest = () => {
         body: JSON.stringify({testid2: testid2}),
       });
       
+        const user = JSON.parse(localStorage.getItem("user"));
+        const adminId = user?.email;
+        if (!adminId) {
+            setMessage("❌ No admin found. Please log in again.");
+            return;
+        }
 
+        // ✅ Update Firestore under specific admin
+        await updateTestList(adminId, testid2);
       setMessage("✅ Upload successful! You can now edit the test.");
       setFileURL(null); // Clear preview after upload
     } catch (error) {
       setMessage("❌ Upload failed. Please check your network.");
     }
   };
+  const updateTestList = async (adminId, testid2) => {
+    try {
+        // ✅ Reference the "test_list" collection inside the specific admin's document
+        const testListRef = doc(db, "admins", adminId, "test_list", testid2);
+        const testRef = doc(db, "tests", testid2);
+        await setDoc(testRef, { active: false });
+        // ✅ Store test ID as a document (instead of an array)
+        await setDoc(testListRef, { uploadedAt: new Date() });
+
+        console.log(`✅ Test ID ${testid2} added for Admin ${adminId}`);
+    } catch (error) {
+        console.error("❌ Failed to update test ID list:", error);
+    }
+};
+
 
   return (
     <div className="upload-container">
