@@ -10,6 +10,15 @@ Non Invasive Proctoring
 * Once PR is merged you can help on any other issue, conversations based on a specific issie must be done on the relevant PR or the issue.
 * Update this file with a line of what change has been made under `New Relase` at the top.
 
-## New Release
-                                    <-New updates go here, leave a line and log it.
-* Updated Readme.md with guidelines
+## Steps to Run 
+1)cd into Quad4ces
+
+2)npm install
+
+3)npm run dev
+
+4)open another parallel terminal(in Quad4aces)
+
+5)cd into backend
+
+6)run the command - "node server.js"
