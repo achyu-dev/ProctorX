@@ -1,5 +1,4 @@
-# Quad_Aces_Proctor
-**Non-Invasive Proctoring Solution**
+# ProctorX - **Non-Invasive Proctoring Solution**
 
 ## Overview
 ProctorX is a non-invasive proctoring application designed to maintain academic integrity during online assessments while respecting user privacy.
